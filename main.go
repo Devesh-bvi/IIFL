@@ -22,6 +22,20 @@ func handleRequests() {
 	myRouter.HandleFunc("/OrderRequest", class.OrderRequest)
 	myRouter.HandleFunc("/OrderStatus", class.OrderStatus)
 	myRouter.HandleFunc("/TradeInformation", class.TradeInformation)
+	myRouter.HandleFunc("/Margin", class.Margin)
+	myRouter.HandleFunc("/OrderBookV2", class.OrderBookV2)
+	myRouter.HandleFunc("/TradeBook", class.TradeBook)
+	myRouter.HandleFunc("/NetPosition", class.NetPosition)
+	myRouter.HandleFunc("/NetPositionNetWise", class.NetPositionNetWise)
+	myRouter.HandleFunc("/PreOrdMarginCalculation", class.PreOrdMarginCalculation)
+	myRouter.HandleFunc("/BackoffMutualFundTransaction", class.BackoffMutualFundTransaction)
+	myRouter.HandleFunc("/BackoffClientProfile", class.BackoffClientProfile)
+	myRouter.HandleFunc("/BackoffEquitytransaction", class.BackoffEquitytransaction)
+	myRouter.HandleFunc("/BackoffFutureTransaction", class.BackoffFutureTransaction)
+	myRouter.HandleFunc("/BackoffoptionTransaction", class.BackoffoptionTransaction)
+	myRouter.HandleFunc("/BackoffLedger", class.BackoffLedger)
+	myRouter.HandleFunc("/BackoffDPTransaction", class.BackoffDPTransaction)
+	myRouter.HandleFunc("/BackoffDPHolding", class.BackoffDPHolding)
 
 	// finally, instead of passing in nil, we want
 	// to pass in our newly created router as the second

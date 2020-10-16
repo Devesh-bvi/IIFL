@@ -10,7 +10,12 @@ import (
 
 type configuration struct {
 	ServiceURL, AppName, AppVer, Key, OsName, RequestCode, RequestCodeHoldingV2, UserID, Password, VersionNo, OcpKey,
-	RequestCodeMarketFeed, RequestCodeOrdReq, RequestCodeOrdStatus, RequestCodeTrdInfo string
+	RequestCodeMarketFeed, RequestCodeOrdReq, RequestCodeOrdStatus, RequestCodeTrdInfo, RequestCodeMarginV3,
+	RequestCodeOrdBkV2, RequestCodeTrdBkV1, RequestCodeNetPositionV4, RequestCodeNPNWV1,
+	RequestCodePreOrdMarCal, RequestCodeBackoffMutulFundTransaction, RequestCodeBackoffClientProfile,
+	RequestCodeBackoffEquitytransaction, RequestCodeBackoffFutureTransaction,
+	RequestCodeBackoffoptionTransaction, RequestCodeBackoffLedger, RequestCodeBackoffDPTransaction,
+	RequestCodeBackoffDPHolding string
 }
 
 //CheckConfig : To get the data from conf.json
