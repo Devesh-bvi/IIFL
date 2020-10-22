@@ -15,7 +15,7 @@ type configuration struct {
 	RequestCodePreOrdMarCal, RequestCodeBackoffMutulFundTransaction, RequestCodeBackoffClientProfile,
 	RequestCodeBackoffEquitytransaction, RequestCodeBackoffFutureTransaction,
 	RequestCodeBackoffoptionTransaction, RequestCodeBackoffLedger, RequestCodeBackoffDPTransaction,
-	RequestCodeBackoffDPHolding string
+	RequestCodeBackoffDPHolding, EncryKey string
 }
 
 //CheckConfig : To get the data from conf.json

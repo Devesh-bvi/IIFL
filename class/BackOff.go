@@ -3,7 +3,6 @@ package class
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"strings"
 )
@@ -14,61 +13,24 @@ func PreOrdMarginCalculation(w http.ResponseWriter, r *http.Request) {
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "PreOrdMarginCalculation"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodePreOrdMarCal + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"OrderRequestorCode":"` + ClientCode + `",
-		"Exch":"N",
-		"ExchType":"D",
-		"ClientCode":"` + ClientCode + `",
-		"ScripCode":"45609",
-		"PlaceModifyCancel":"M",
-		"TransactionType":"B",
-		"AtMarket":"false",
-		"LimitRate":650,
-		"WithSL":"N",
-		"SLTriggerRate":0,
-		"IsSLTriggered":"N",
-		"Volume":250,
-		"OldTradedQty":0,
-		"ProductType":"D",
-		"ExchOrderId":"0",
-		"ClientIP":"21.1.2",
-		"AppSource":54
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodePreOrdMarCal, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := PreOrdMarginCalculationBody{OrderRequestorCode: ClientCode, Exch: "N", ExchType: "D", ClientCode: ClientCode, ScripCode: "45609", PlaceModifyCancel: "M",
+		TransactionType: "B", AtMarket: "false", LimitRate: 650, WithSL: "N", SLTriggerRate: 0, IsSLTriggered: "N", Volume: 250, OldTradedQty: 0, ProductType: "D",
+		ExchOrderID: "0", ClientIP: "21.1.2", AppSource: 54}
 
-	res, err := client.Do(req)
+	PreOrdMarginCalculationData := PreOrdMarginCalculationReq{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(PreOrdMarginCalculationData)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var PreOrdMarginCalculationRes PreOrdMarginCalculationResponse
@@ -85,46 +47,22 @@ func BackoffMutualFundTransaction(w http.ResponseWriter, r *http.Request) {
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "BackoffMutualFundTransaction"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeBackoffMutulFundTransaction + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `",
-		"FromDate":"20190101",
-		"ToDate":"20201001"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeBackoffMutulFundTransaction, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := BackoffMutualFundTranBody{ClientCode: ClientCode, FromDate: "20190101", ToDate: "20201001"}
 
-	res, err := client.Do(req)
+	BackMutualFundTranData := BackMutualFundTranBodyReq{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(BackMutualFundTranData)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var BackoffMutualFundTransactionRes BackoffMutualFundTransactionResponse
@@ -141,46 +79,22 @@ func BackoffClientProfile(w http.ResponseWriter, r *http.Request) {
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "BackoffClientProfile"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeBackoffClientProfile + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `",
-		"FromDate":"20190101",
-		"ToDate":"20201001"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeBackoffClientProfile, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := BackoffMutualFundTranBody{ClientCode: ClientCode, FromDate: "20190101", ToDate: "20201001"}
 
-	res, err := client.Do(req)
+	BackClientProfileData := BackMutualFundTranBodyReq{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(BackClientProfileData)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var BackoffClientProfileRes BackoffClientProfileResponse
@@ -197,46 +111,22 @@ func BackoffEquitytransaction(w http.ResponseWriter, r *http.Request) {
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "BackoffEquitytransaction"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeBackoffEquitytransaction + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `",
-		"FromDate":"20190101",
-		"ToDate":"20201001"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeBackoffEquitytransaction, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := BackoffMutualFundTranBody{ClientCode: ClientCode, FromDate: "20190101", ToDate: "20201001"}
 
-	res, err := client.Do(req)
+	BackEquitytransactionData := BackMutualFundTranBodyReq{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(BackEquitytransactionData)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var BackoffClientProfileRes BackoffClientProfileResponse
@@ -253,46 +143,22 @@ func BackoffFutureTransaction(w http.ResponseWriter, r *http.Request) {
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "BackoffFutureTransaction"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeBackoffFutureTransaction + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `",
-		"FromDate":"20190101",
-		"ToDate":"20201001"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeBackoffFutureTransaction, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := BackoffMutualFundTranBody{ClientCode: ClientCode, FromDate: "20190101", ToDate: "20201001"}
 
-	res, err := client.Do(req)
+	BackFutureTransactionData := BackMutualFundTranBodyReq{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(BackFutureTransactionData)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var BackoffFutureTransactionRes BackoffFutureTransactionResponse
@@ -309,46 +175,22 @@ func BackoffoptionTransaction(w http.ResponseWriter, r *http.Request) {
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "BackoffoptionTransaction"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeBackoffoptionTransaction + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `",
-		"FromDate":"20190101",
-		"ToDate":"20201001"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeBackoffoptionTransaction, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := BackoffMutualFundTranBody{ClientCode: ClientCode, FromDate: "20190101", ToDate: "20201001"}
 
-	res, err := client.Do(req)
+	BackoptionTransactionData := BackMutualFundTranBodyReq{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(BackoptionTransactionData)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var BackoffoptionTransactionRes BackoffoptionTransactionResponse
@@ -365,46 +207,22 @@ func BackoffLedger(w http.ResponseWriter, r *http.Request) {
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "BackoffLedger"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeBackoffLedger + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `",
-		"FromDate":"20190101",
-		"ToDate":"20201001"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeBackoffLedger, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := BackoffMutualFundTranBody{ClientCode: ClientCode, FromDate: "20190101", ToDate: "20201001"}
 
-	res, err := client.Do(req)
+	BackoffLedgerData := BackMutualFundTranBodyReq{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(BackoffLedgerData)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var BackoffLedgerRes BackoffLedgerResponse
@@ -421,46 +239,22 @@ func BackoffDPTransaction(w http.ResponseWriter, r *http.Request) {
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "BackoffDPTransaction"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeBackoffDPTransaction + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `",
-		"FromDate":"20190101",
-		"ToDate":"20201001"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeBackoffDPTransaction, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := BackoffMutualFundTranBody{ClientCode: ClientCode, FromDate: "20190101", ToDate: "20201001"}
 
-	res, err := client.Do(req)
+	BackDPTransactionData := BackMutualFundTranBodyReq{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(BackDPTransactionData)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var BackoffLedgerRes BackoffLedgerResponse
@@ -477,46 +271,22 @@ func BackoffDPHolding(w http.ResponseWriter, r *http.Request) {
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "BackoffDPHolding"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeBackoffDPHolding + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `",
-		"FromDate":"20190101",
-		"ToDate":"20201001"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeBackoffDPHolding, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := BackoffMutualFundTranBody{ClientCode: ClientCode, FromDate: "20190101", ToDate: "20201001"}
 
-	res, err := client.Do(req)
+	BackDPDPHoldingData := BackMutualFundTranBodyReq{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(BackDPDPHoldingData)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var BackoffDPHoldingRes BackoffDPHoldingResponse

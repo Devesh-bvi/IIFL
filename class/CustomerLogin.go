@@ -3,7 +3,6 @@ package class
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"strings"
 )
@@ -21,47 +20,21 @@ func LoginRequestMobileForVendor(w http.ResponseWriter, r *http.Request) {
 	IPadd = GetIPAddress()
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "LoginRequestMobileForVendor"
 
 	method := "POST"
 
-	//"UserID": "Ae86Ls5iwTrPOm1w6PL2Cg==",
-	//"Password": "MnB1tFNCzzLAf8ezdonXVw=="
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCode, UserID: Encryption(config.UserID), Password: Encryption(config.Password)}
 
-	payload := strings.NewReader(`{
-		"head": {
-		  "appName": "` + config.AppName + `",
-		  "appVer": "` + config.AppVer + `",
-		  "key": "` + config.Key + `",
-		  "osName": "` + config.OsName + `",
-		  "requestCode": "` + config.RequestCode + `",
-		  "userId": "Ae86Ls5iwTrPOm1w6PL2Cg==",
-		  "password": "MnB1tFNCzzLAf8ezdonXVw=="
-		},
-		"body": {
-		  "Email_id": "` + EmailID + `",
-		  "LocalIP": "` + IPadd + `",
-		  "PublicIP": "` + IPadd + `",
-		  "ContactNumber": "` + ContactNumber + `"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	body := LoginMobileVendorBody{EmailID: EmailID, LocalIP: IPadd, PublicIP: IPadd, ContactNumber: ContactNumber}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
+	loginMobileVendorRequest := LoginMobileVendorRequest{Head: header, Body: body}
 
-	res, err := client.Do(req)
+	data, _ := json.Marshal(loginMobileVendorRequest)
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+	bodyString := HTTPClientCookies(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var LoginVendorRes LoginVendorResponse
@@ -79,61 +52,22 @@ func LoginRequest(w http.ResponseWriter, r *http.Request) {
 	IPadd = GetIPAddress()
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "LoginRequest"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-		"requestCode":"` + config.RequestCode + `",
-		"key":"` + config.Key + `",
-		"appVer":"` + config.AppVer + `",
-		"appName": "` + config.AppName + `",
-		"osName":"` + config.OsName + `",
-		"userId":"` + config.UserID + `",
-		"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"y24giIyBtUNgutz1wYTM5w==",
-		"Password":"49dKKNv3UFpwoK+st09O5A==",
-		"HDSerialNumber":"asdf",
-		"MACAddress":"asdf",
-		"MachineID":"asfdasdf",
-		"VersionNo":"` + config.VersionNo + `",
-		"RequestNo":1,
-		"My2PIN":"X8EUGQ2U6OzA+M6ejtB/uQ==",
-		"ConnectionType":1,
-		"LocalIP":"` + IPadd + `",
-		"PublicIP":"` + IPadd + `"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCode, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
+	body := LoginRequestBody{ClientCode: Encryption("96131461"), Password: "49dKKNv3UFpwoK+st09O5A==", HDSerialNumber: "asdf", MACAddress: "asdf", MachineID: "asfdasdf", VersionNo: config.VersionNo, RequestNo: 1, My2PIN: "X8EUGQ2U6OzA+M6ejtB/uQ==", ConnectionType: 1, LocalIP: IPadd, PublicIP: IPadd}
 
-	res, err := client.Do(req)
+	LoginRequestRequest := LoginRequestRequest{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(LoginRequestRequest)
 
-	var session string
-	var path string
-	for _, cookie := range res.Cookies() {
-		if cookie.Name == "IIFLMarcookie" {
-			session = cookie.Value
-			path = cookie.Path
-		}
-	}
-	fmt.Printf("session: %s, path: %s", session, path)
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+	bodyString := HTTPClientCookies(method, url, payload)
+
 	json.NewEncoder(w).Encode(bodyString)
 
 	var LoginClientRes LoginClientResponse

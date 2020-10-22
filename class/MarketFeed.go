@@ -3,7 +3,6 @@ package class
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"strings"
 )
@@ -14,59 +13,25 @@ func MarketFeed(w http.ResponseWriter, r *http.Request) {
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "MarketFeed"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-		"appName":"` + config.AppName + `",
-		"appVer":"` + config.AppVer + `",
-		"key":"` + config.Key + `",
-		"osName":"` + config.OsName + `",
-		"userId":"` + config.UserID + `",
-		"password":"` + config.Password + `",
-		"requestCode":"` + config.RequestCodeMarketFeed + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `",
-		"Count":"2",
-		"MarketFeedData":[
-		{
-		"Exch":"N",
-		"ExchType":"C",
-		"ScripCode":"2885"
-		},
-		{
-		"Exch":"N",
-		"ExchType":"C",
-		"ScripCode":"22"
-		}
-		],
-		"ClientLoginType":"0",
-		"LastRequestTime":"/Date(1600248018615)/",
-		"RefreshRate":"H"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeMarketFeed, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	TradeInformList1 := MarketFeedDataList{Exch: "N", ExchType: "C", ScripCode: "2885"}
+	TradeInformList2 := MarketFeedDataList{Exch: "N", ExchType: "C", ScripCode: "22"}
 
-	res, err := client.Do(req)
+	body := MarketFeedBody{ClientCode: ClientCode, Count: "2", MarketFeedDataList: []MarketFeedDataList{TradeInformList1, TradeInformList2}, ClientLoginType: "0", LastRequestTime: "/Date(1600248018615)/", RefreshRate: "H"}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	MarketFeedRequest := MarketFeedDataRequest{Head: header, Body: body}
+
+	data, _ := json.Marshal(MarketFeedRequest)
+
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var MarketFeedRes MarketFeedResponse

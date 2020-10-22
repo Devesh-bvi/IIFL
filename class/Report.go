@@ -3,7 +3,6 @@ package class
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"strings"
 )
@@ -14,44 +13,22 @@ func Holding(w http.ResponseWriter, r *http.Request) {
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "Holding"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeHoldingV2 + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCode, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := HoldingBody{ClientCode: ClientCode}
 
-	res, err := client.Do(req)
+	HoldingRequest := HoldingRequest{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(HoldingRequest)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var HoldRes HoldResponse
@@ -73,39 +50,17 @@ func Margin(w http.ResponseWriter, r *http.Request) {
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeMarginV3 + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeMarginV3, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := HoldingBody{ClientCode: ClientCode}
 
-	res, err := client.Do(req)
+	MarginRequest := HoldingRequest{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(MarginRequest)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var MarginRes MarginResponse
@@ -122,51 +77,28 @@ func OrderBookV2(w http.ResponseWriter, r *http.Request) {
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
 	url := config.ServiceURL + "OrderBookV2"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeOrdBkV2 + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeOrdBkV2, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := HoldingBody{ClientCode: ClientCode}
 
-	res, err := client.Do(req)
+	OrderBookV2Request := HoldingRequest{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(OrderBookV2Request)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var OrderBookV2Res OrderBookV2Response
 
 	// json to golang struct
 	json.Unmarshal([]byte(bodyString), &OrderBookV2Res)
-	fmt.Printf("Reason: %s, StatusDescription: %s", OrderBookV2Res.Body.OrderBookDetail[0].Reason, OrderBookV2Res.Head.StatusDescription)
+	fmt.Printf("Reason: %s, StatusDescription: %s", OrderBookV2Res.Body.Message, OrderBookV2Res.Head.StatusDescription)
 
 }
 
@@ -181,39 +113,17 @@ func TradeBook(w http.ResponseWriter, r *http.Request) {
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeTrdBkV1 + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeTrdBkV1, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := HoldingBody{ClientCode: ClientCode}
 
-	res, err := client.Do(req)
+	TradeBookRequest := HoldingRequest{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(TradeBookRequest)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var TradeBookRes TradeBookRespone
@@ -230,44 +140,22 @@ func NetPosition(w http.ResponseWriter, r *http.Request) {
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
+
 	url := config.ServiceURL + "NetPosition"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeNetPositionV4 + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeNetPositionV4, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// 1i4yexcaxvqpfnvuq1mlajjc - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=1i4yexcaxvqpfnvuq1mlajjc")
+	body := HoldingBody{ClientCode: ClientCode}
 
-	res, err := client.Do(req)
+	NetPositionRequest := HoldingRequest{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(NetPositionRequest)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var NetPositionRes NetPositionResponse
@@ -280,48 +168,24 @@ func NetPosition(w http.ResponseWriter, r *http.Request) {
 
 //NetPositionNetWise : This API will provide client Net Position report with additional parameter as multiplier.
 func NetPositionNetWise(w http.ResponseWriter, r *http.Request) {
-
 	ClientCode := r.URL.Query().Get("ClientCode")
 
 	config := CheckConfig()
-	//fmt.Println(domainame.AppName)
 	url := config.ServiceURL + "NetPositionNetWise"
 
 	method := "POST"
 
-	payload := strings.NewReader(`{
-		"head":{
-			"appName": "` + config.AppName + `",
-			"appVer": "` + config.AppVer + `",
-			"key": "` + config.Key + `",
-			"osName": "` + config.OsName + `",
-			"requestCode": "` + config.RequestCodeNPNWV1 + `",
-			"userId":"` + config.UserID + `",
-			"password":"` + config.Password + `"
-		},
-		"body":{
-		"ClientCode":"` + ClientCode + `"
-		}
-		}`)
-	//fmt.Println(payload)
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	header := Header{AppName: config.AppName, AppVer: config.AppVer, Key: config.Key, OsName: config.OsName, RequestCode: config.RequestCodeNPNWV1, UserID: config.UserID, Password: config.Password}
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Ocp-Apim-Subscription-Key", config.OcpKey)
-	req.Header.Add("Content-Type", "application/json")
-	// jhj5pipoc4xzda1f5hhj5kip - get this from the login cokiee
-	req.Header.Add("Cookie", "IIFLMarcookie=jhj5pipoc4xzda1f5hhj5kip")
+	body := HoldingBody{ClientCode: ClientCode}
 
-	res, err := client.Do(req)
+	NetPositionNetWiseReq := HoldingRequest{Head: header, Body: body}
 
-	body, err := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := json.Marshal(NetPositionNetWiseReq)
 
-	//fmt.Println(string(body))
-	bodyString := string(body)
+	payload := strings.NewReader(string(data))
+
+	bodyString := HTTPClient(method, url, payload)
 	json.NewEncoder(w).Encode(bodyString)
 
 	var NetPositionNetWiseRes NetPositionNetWiseResponse

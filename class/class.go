@@ -1,5 +1,191 @@
 package class
 
+///**********************Request************************************** //
+
+// Header : Header
+type Header struct {
+	AppName     string `json:"appName"`
+	AppVer      string `json:"appVer"`
+	Key         string `json:"key"`
+	OsName      string `json:"osName"`
+	RequestCode string `json:"requestCode"`
+	UserID      string `json:"userId"`
+	Password    string `json:"password"`
+}
+
+//LoginMobileVendorBody :LoginMobileVendorBody
+type LoginMobileVendorBody struct {
+	EmailID       string `json:"Email_id"`
+	LocalIP       string `json:"LocalIP"`
+	PublicIP      string `json:"PublicIP"`
+	ContactNumber string `json:"ContactNumber"`
+}
+
+// LoginMobileVendorRequest : LoginMobileVendorRequest
+type LoginMobileVendorRequest struct {
+	Head Header                `json:"head"`
+	Body LoginMobileVendorBody `json:"body"`
+}
+
+// LoginRequestBody : LoginRequestBody
+type LoginRequestBody struct {
+	ClientCode     string `json:"ClientCode"`
+	Password       string `json:"Password"`
+	HDSerialNumber string `json:"HDSerialNumber"`
+	MACAddress     string `json:"MACAddress"`
+	MachineID      string `json:"MachineID"`
+	VersionNo      string `json:"VersionNo"`
+	RequestNo      int    `json:"RequestNo"`
+	My2PIN         string `json:"My2PIN"`
+	ConnectionType int    `json:"ConnectionType"`
+	LocalIP        string `json:"LocalIP"`
+	PublicIP       string `json:"PublicIP"`
+}
+
+// LoginRequestRequest : LoginRequestRequest
+type LoginRequestRequest struct {
+	Head Header           `json:"head"`
+	Body LoginRequestBody `json:"body"`
+}
+
+// HoldingBody : HoldingBody
+type HoldingBody struct {
+	ClientCode string `json:"ClientCode"`
+}
+
+// HoldingRequest : HoldingRequest
+type HoldingRequest struct {
+	Head Header      `json:"head"`
+	Body HoldingBody `json:"body"`
+}
+
+// OrderRequestBody : OrderRequestBody
+type OrderRequestBody struct {
+	ClientCode         string `json:"ClientCode"`
+	OrderFor           string `json:"OrderFor"`
+	Exchange           string `json:"Exchange"`
+	ExchangeType       string `json:"ExchangeType"`
+	Price              int    `json:"Price"`
+	OrderID            int    `json:"OrderID"`
+	OrderType          string `json:"OrderType"`
+	Qty                int    `json:"Qty"`
+	OrderDateTime      string `json:"OrderDateTime"`
+	ScripCode          int    `json:"ScripCode"`
+	AtMarket           bool   `json:"AtMarket"`
+	RemoteOrderID      string `json:"RemoteOrderID"`
+	ExchOrderID        string `json:"ExchOrderID"`
+	DisQty             int    `json:"DisQty"`
+	IsStopLossOrder    bool   `json:"IsStopLossOrder"`
+	StopLossPrice      int    `json:"StopLossPrice"`
+	IsVTD              bool   `json:"IsVTD"`
+	IOCOrder           bool   `json:"IOCOrder"`
+	IsIntraday         bool   `json:"IsIntraday"`
+	PublicIP           string `json:"PublicIP"`
+	AHPlaced           string `json:"AHPlaced"`
+	ValidTillDate      string `json:"ValidTillDate"`
+	IOrderValidity     int    `json:"iOrderValidity"`
+	OrderRequesterCode string `json:"OrderRequesterCode"`
+	TradedQty          int    `json:"TradedQty"`
+}
+
+// ReqDataRequest :ReqDataRequest
+type ReqDataRequest struct {
+	Head Header           `json:"head"`
+	Body OrderRequestBody `json:"body"`
+}
+
+// OrderRequestAPI : OrderRequestAPI
+type OrderRequestAPI struct {
+	ReqData   ReqDataRequest `json:"_ReqData"`
+	AppSource int            `json:"AppSource"`
+}
+
+//OrderStatusBody : OrderStatusBody
+type OrderStatusBody struct {
+	ClientCode       string             `json:"ClientCode"`
+	OrdStatusReqList []OrdStatusReqList `json:"OrdStatusReqList"`
+}
+
+// OrdStatusReqList : OrdStatusReqListf
+type OrdStatusReqList struct {
+	Exch          string `json:"Exch"`
+	ExchType      string `json:"ExchType"`
+	ScripCode     int    `json:"ScripCode"`
+	RemoteOrderID string `json:"RemoteOrderID"`
+}
+
+// OrderStatusRequest :OrderStatusRequest
+type OrderStatusRequest struct {
+	Head Header          `json:"head"`
+	Body OrderStatusBody `json:"body"`
+}
+
+//PreOrdMarginCalculationBody : PreOrdMarginCalculationBody
+type PreOrdMarginCalculationBody struct {
+	OrderRequestorCode string `json:"OrderRequestorCode"`
+	Exch               string `json:"Exch"`
+	ExchType           string `json:"ExchType"`
+	ClientCode         string `json:"ClientCode"`
+	ScripCode          string `json:"ScripCode"`
+	PlaceModifyCancel  string `json:"PlaceModifyCancel"`
+	TransactionType    string `json:"TransactionType"`
+	AtMarket           string `json:"AtMarket"`
+	LimitRate          int    `json:"LimitRate"`
+	WithSL             string `json:"WithSL"`
+	SLTriggerRate      int    `json:"SLTriggerRate"`
+	IsSLTriggered      string `json:"IsSLTriggered"`
+	Volume             int    `json:"Volume"`
+	OldTradedQty       int    `json:"OldTradedQty"`
+	ProductType        string `json:"ProductType"`
+	ExchOrderID        string `json:"ExchOrderId"`
+	ClientIP           string `json:"ClientIP"`
+	AppSource          int    `json:"AppSource"`
+}
+
+// PreOrdMarginCalculationReq : PreOrdMarginCalculationReq
+type PreOrdMarginCalculationReq struct {
+	Head Header                      `json:"head"`
+	Body PreOrdMarginCalculationBody `json:"body"`
+}
+
+// BackoffMutualFundTranBody :BackoffMutualFundTranBody
+type BackoffMutualFundTranBody struct {
+	ClientCode string `json:"ClientCode"`
+	FromDate   string `json:"FromDate"`
+	ToDate     string `json:"ToDate"`
+}
+
+// BackMutualFundTranBodyReq : BackMutualFundTranBodyReq
+type BackMutualFundTranBodyReq struct {
+	Head Header                    `json:"head"`
+	Body BackoffMutualFundTranBody `json:"body"`
+}
+
+//MarketFeedBody : MarketFeedBody
+type MarketFeedBody struct {
+	ClientCode         string               `json:"ClientCode"`
+	Count              string               `json:"Count"`
+	MarketFeedDataList []MarketFeedDataList `json:"MarketFeedData"`
+	ClientLoginType    string               `json:"ClientLoginType"`
+	LastRequestTime    string               `json:"LastRequestTime"`
+	RefreshRate        string               `json:"RefreshRate"`
+}
+
+//MarketFeedDataList : MarketFeedDataList
+type MarketFeedDataList struct {
+	Exch      string `json:"Exch"`
+	ExchType  string `json:"ExchType"`
+	ScripCode string `json:"ScripCode"`
+}
+
+// MarketFeedDataRequest :MarketFeedDataRequest
+type MarketFeedDataRequest struct {
+	Head Header         `json:"head"`
+	Body MarketFeedBody `json:"body"`
+}
+
+///**********************Response************************************** //
+
 //LoginVendorResponse : Response of LoginRequestMobileForVendor
 type LoginVendorResponse struct {
 	Body struct {
